@@ -2,24 +2,40 @@ const express = require('express');
 const router = express.Router();
 const Recipe = require('../models/Recipe');
 
-router.get('/', (req, res) => {
-    res.send('We are on recipes');
+//GET BACK ALL THE POST
+router.get('/', async (req, res) => {
+    try{
+        const recipes = await Recipe.find();
+        res.json(recipes);
+    }catch(err) {
+        res.json({message:err});
+    }
 });
 
-router.post('/', (req, res) => {
+// SUBMIT A POST
+router.post('/', async (req, res) => {
    const recipe = new Recipe({
        title: req.body.title,
        ingredients: req.body.ingredients,
-       preparations: req.body.preparations
+       preparation: req.body.preparation
    });
-
-   recipe.save()
-       .then( data => {
-           res.json(data);
-       })
-       .catch(err => {
-        res.json({message: err});
-    });
+   try {
+       const saveRecipe = await recipe.save()
+       res.json(saveRecipe);
+   } catch(err) {
+       res.json({message: err});
+   }
 });
 
+//SPECIFIC POST
+router.get('/:recipeId', async (req,res) => {
+    try{
+        const recipe = await Recipe.findById(req.params.recipeId);
+        res.json(recipe);
+    }catch(err) {
+        res.json({message:err});
+    }
+});
+
+//DELETE POST
 module.exports = router;
