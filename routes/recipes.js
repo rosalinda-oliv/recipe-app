@@ -38,4 +38,14 @@ router.get('/:recipeId', async (req,res) => {
 });
 
 //DELETE POST
+router.delete('/:recipeId', async (req,res) => {
+   try{
+       const removeRecipe = await Recipe.remove({_id: req.params.recipeId});
+       res.json(removeRecipe);
+   } catch(err) {
+       res.json({message:err});
+   }
+});
+
+// UPDATE A POST
 module.exports = router;
