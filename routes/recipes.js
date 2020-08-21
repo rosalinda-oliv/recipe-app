@@ -48,4 +48,15 @@ router.delete('/:recipeId', async (req,res) => {
 });
 
 // UPDATE A POST
+router.patch('/:recipeId', async (req,res) => {
+    try{
+        const updateRecipe = await Recipe.updateOne(
+            {_id: req.params.recipeId},
+            { $set: {title:req.body.title}},
+        );
+        res.json(updateRecipe);
+    }catch(err) {
+        res.json({message:err});
+    }
+})
 module.exports = router;
